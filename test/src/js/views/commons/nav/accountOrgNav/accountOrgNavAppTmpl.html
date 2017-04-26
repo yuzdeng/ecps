@@ -1,0 +1,21 @@
+<script type="text/x-jsrender" id="accountOrgNavAppTmpl1448509749777">
+<div id="switchoverPanel{{:idSuffix}}" class="switchoverPanel" style="display:none;">
+    {{if isAccountAdmin}}
+    <div class="accountLevel" id="accountContainer{{:idSuffix}}">
+        <h3>{{:~i18n('nav.account.legend')}}</h3>
+        <ul class="">
+            <li class="{{if accountLevel}}active{{/if}}" id="changeToAccountLevel{{:idSuffix}}">{{>accountName}}</li>
+        </ul>
+    </div>
+    {{/if}}
+    <div class="orgLevel" id="organizationContainer{{:idSuffix}}">
+        <h3>{{:~i18n('nav.organization.legend')}}</h3>
+        <div class="organizationsList" id="organizationsList{{:idSuffix}}"></div>
+    </div>
+</div>
+</script>
+<script type="text/javascript">
+   define("views/commons/nav/accountOrgNav/accountOrgNavAppTmpl.html",function(){
+       return true;
+   });
+</script>

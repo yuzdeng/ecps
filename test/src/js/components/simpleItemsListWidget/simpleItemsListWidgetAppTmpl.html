@@ -1,0 +1,37 @@
+<script type="text/x-jsrender" id="simpleItemsListWidgetAppTmpl1448603269936">
+<div class="simpleItemsListWidget">
+    <div id="quickSearchContainer{{:idSuffix}}" class="quickSearchContainer" style="display:none"></div>
+    <ul style="display:block;" id="itemsList{{:idSuffix}}">
+        {{for data}}
+            <li class="{{if isActive}}active{{/if}} {{if hasNextLevel}}hasNextLevel{{/if}}" itemId="{{>id}}">
+                <a href="javascript:void(0)">{{>name}}</a>
+                {{if hasNextLevel}}
+                    <i class="arrows-right"></i>
+                    <div class="nextLevelContainer"></div>
+                {{/if}}
+            </li>
+        {{/for}}
+    </ul>
+    <div id="pagination{{:idSuffix}}" class="pagination" style="display: none;">
+        <a href="javascript:" class="first" data-action="first"><i class="ui-icon ui-icon-seek-first"></i> </a>
+        <a href="javascript:" class="previous" data-action="previous"><i class="ui-icon ui-icon-seek-prev"></i></a>
+        <span class="current" data-action="current" style="color:#585252">1</span>
+        <a href="javascript:" class="next" data-action="next"><i class="ui-icon ui-icon-seek-next"></i></a>
+        <a href="javascript:" class="last" data-action="last"><i class="ui-icon ui-icon-seek-end"></i></a>
+    </div>
+</div>
+</script>
+<script type="text/x-jsrender" id="itemTmpl1448509814607">
+<li class="{{if isActive}}active{{/if}}  {{if hasNextLevel}}hasNextLevel{{/if}}" itemId="{{>id}}">
+<a href="javascript:void(0)">{{>name}}</a>
+{{if hasNextLevel}}
+    <i class="arrows-right"></i>
+    <div class="nextLevelContainer"></div>
+{{/if}}
+</li>
+</script>
+<script type="text/javascript">
+   define("components/simpleItemsListWidget/simpleItemsListWidgetAppTmpl.html",function(){
+       return true;
+   });
+</script>

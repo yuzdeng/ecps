@@ -1,0 +1,18 @@
+<script type="text/x-jsrender" id="selectBoxWidgetAppTmpl1448715795028">
+
+<div class="selectBoxWidget">
+    <div style="position:relative">
+        <div class="selectedItemsContainer text-word-break universe_filter_contact"  id="selectedItemsContainer{{:idSuffix}}">{{:~i18n('global.select.null.text')}}</div>
+        <div id="simpleItemsListWidgetContainer{{:idSuffix}}" class="simpleItemsListWidgetContainer" style="display:none;"></div>
+    </div>
+</div>
+<input class="input-invisible {{if doValid}}{required:true}{{/if}}" type="text" id="doValid{{:idSuffix}}" name="doValid{{:idSuffix}}">
+</script>
+<script type="text/x-jsrender" id="itemTmpl1448715795028">
+<div class="selectedItem clearfix" itemId="{{>id}}"><span class="padding20-R">{{>name}}</span><a class="selectedItemRemove icn_close_16" href="javascript:void(0)" itemId="{{>id}}"></a></div>
+</script>
+<script type="text/javascript">
+   define("components/selectBox/selectBoxWidgetAppTmpl.html",function(){
+       return true;
+   });
+</script>
