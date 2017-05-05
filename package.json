@@ -75,7 +75,7 @@
   "directories": {},
   "dist": {
     "shasum": "7c05567f1f7fe79e8837b9d7035d017eb64989b8",
-    "tarball": "https://registry.npmjs.org/ecps/-/ecps-1.0.4.tgz"
+    "tarball": "https://registry.npmjs.org/ecps/-/ecps-1.0.5.tgz"
   },
   "gitHead": "",
   "homepage": "",
@@ -98,8 +98,8 @@
   "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git://github.com/yuzdeng/ecps"
   },
   "scripts": {},
-  "version": "1.0.4"
+  "version": "1.0.5"
 }
