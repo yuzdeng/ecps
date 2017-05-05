@@ -3,35 +3,32 @@ ECPS - Static Package Manager
 
 ECPS
 
-## 安装
+## Install
 
 ```
 npm install ecps -g
 ```
 
-## 使用方法
+## Usage
 
 ```bash
 ecps [COMMAND]
 ```
 
-### 目录结构
+### Table of Contents
 
 ```
-src/		# 源代码
+src/		# source code
 	js/
 	css/
 	img/
-build/		# 打包后代码，未压缩
-	js/
-	css/
-dist/		# 压缩后代码
+dist/		# combo/compress files
 	js/
 	css/
 	img/
 ```
 
-### 构建JS
+### Build Command
 
 ```bash
 ecps src/js/g.js
@@ -39,7 +36,7 @@ ecps src/js/page/demo.js
 ecps src/js
 ```
 
-### 构建LESS
+### Build LESS
 
 ```bash
 ecps src/css/g.less
@@ -47,36 +44,38 @@ ecps src/css/page/demo.less
 ecps src/css
 ```
 
-### 构建图片
+### Build Image
 
 ```bash
 ecps src/img/demo.png
 ecps src/img
 ```
 
-### 压缩打包后的代码
+### Compress File
 
 ```bash
-ecps min build/js/g.js
+ecps min src/js/g.js
 ```
 
-### 指定配置
-用config参数指定配置，默认用当前目录下的`ecps-config.js`。
+### Customize Config
+use config arg to customize config file, default config file is ecps-config.js
 
 ```bash
 ecps src/js/g.js --config=my-config.js
 ```
 
-### 整理build、dist目录
+### Arrange Dist Folder
 
-删除build、dist里的多余的目录和文件。
+delete extra directories and files in dist
 
 ```bash
 ecps cleanup
 ```
 
-### 配置说明
+### Config Arg
 
-* main：JS和CSS入口文件。
-* libjs：全局非AMD文件。
-* globaljs：全局入口文件。
+* main：the enter file about JS and CSS
+* libjs：global normal file(not the AMD file)
+* globaljs：global enter file, if a AMD module already packed in the globaljs,the other sub AMD file won't packed it again unless you add it in ignoreJs
+* ignoreJs: ignore the AMD module packed in globaljs, still packed the module in.
+* isCompress: weather or not compress the file in dist.

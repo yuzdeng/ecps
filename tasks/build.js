@@ -16,25 +16,19 @@ var Util = require(__dirname + '/../util');
 
 exports.run = function(args, config) {
 
-	// 转换成相对路径
+	// translate to relative path
 	function getRelativePath(path, type) {
 		var dirPath = Path.resolve(config.root + type);
 		return Path.relative(dirPath, path).split(Path.sep).join('/');
 	}
 
-	// 获取build路径
-	function getBuildPath(path) {
-		var relativePath = getRelativePath(path, '/src');
-		return Path.resolve(config.root + '/build/' + relativePath.replace(/\.less$/, '.css'));
-	}
-
-	// 获取dist路径
+	// get dist folder path
 	function getDistPath(path) {
 		var relativePath = getRelativePath(path, '/src');
 		return Path.resolve(config.root + '/dist/' + relativePath.replace(/\.less$/, '.css'));
 	}
 
-	// 获取src路径
+	// get src path
 	function getSrcPath(path) {
 		var dirPath = Path.resolve(config.root + '/dist');
 		var relativePath = Path.relative(dirPath, path).split(Path.sep).join('/');
@@ -45,7 +39,7 @@ exports.run = function(args, config) {
 		}
 	}
 
-	// 是否可构建的文件
+	// check the file can build or not
 	function canBuild(path) {
 		if (!Util.indir(path, Path.resolve(config.root + '/src'))) {
 			return false;
@@ -68,7 +62,7 @@ exports.run = function(args, config) {
 		return /\.[a-z]+$/.test(path);
 	}
 
-	// 取得文件MD5
+	// get file's MD5 value
 	function getFileVersion(pathList, callback) {
 		pathList = _.uniq(pathList);
 
@@ -76,7 +70,6 @@ exports.run = function(args, config) {
 
 		var result = {};
 
-		// 取得文件MD5
 		pathList.forEach(function(path) {
 			var content = Util.readFileSync(path);
 			var md5 = Util.md5(content);
@@ -98,7 +91,7 @@ exports.run = function(args, config) {
 	}
 
 
-	// 将JS代码改成AMD模块，包含路径转换，补充模块ID，模板转换等
+	// transform the code to AMD module,contain path transform, add module ID, template transformation etc.
 	function fixModule(path, str) {
 		var root = path.replace(/^(.*?)[\\\/](src|build|dist)[\\\/].*$/, '$1');
 		var jsReg = new RegExp( '^.+' + config.jsSrcPath.replace(/\./g,'\\.').replace(/\:/g,'\\:') + '\/' );
@@ -127,12 +120,12 @@ exports.run = function(args, config) {
 			}).replace(/,\n\n/g, ',\n');
 		}
 
-		// 补充模块ID
+		// add module ID
 		if(/(?:^|[^\w\.])define\s*\(/.test(str) && !/(?:^|[^\w\.])define\s*\(\s*['"]/.test(str)) {
 			str = str.replace(/\b(define\s*\(\s*)/, '$1"' + mid + '", ');
 		}
 
-		// 补齐依赖
+		// add the dependency module
 		str = str.replace(/((?:^|[^\w\.])define\s*\(\s*['"].*?['"]\s*,\s*)([['"][\s\S]+?)(,\s*function\s*\()/g, function($0, $1, $2, $3) {
 			return $1 + fixDep($2, true) + $3;
 		});
@@ -141,7 +134,7 @@ exports.run = function(args, config) {
 		});
 		str = str.replace(/((?:^|[^\w\.])define\s*\(\s*['"].*?['"]\s*)(,\s*function\s*\()/g, '$1,[]$2');
 
-		// 非AMD模块
+		// if not a AMD module,transform it to a AMD module
 		if(!/(?:^|[^\w\.])(define|require)\s*\(/.test(str)) {
 			return str += '\n/* autogeneration */\ndefine("' + mid + '", [], function(){});\n';
 		}
@@ -294,7 +287,7 @@ exports.run = function(args, config) {
 
 		var depList = grepDepList(path, jsDirPath, true);
 
-		var content = Util.banner;
+		var content ="";
 
 		content += '\n(function($) {\n\n';
 
@@ -334,7 +327,7 @@ exports.run = function(args, config) {
 		return content;
 	}
 
-	// 图片版本化
+	// add version to img
 	function renameAssets(cssPath, content, callback) {
 		var dirPath = Path.dirname(cssPath);
 
@@ -383,17 +376,17 @@ exports.run = function(args, config) {
 			});
 
 			_.each(data, function(version, path) {
-				var buildPath = getBuildPath(path);
+				// var buildPath = getBuildPath(path);
 				var distPath = getDistPath(path);
 
 				if (version) {
-					buildPath = addVersion(buildPath, version);
+					// buildPath = addVersion(buildPath, version);
 					distPath = addVersion(distPath, version);
 				}
 
-				if (!Fs.existsSync(buildPath) || Util.mtime(path) >= Util.mtime(buildPath)) {
-					Util.copyFile(path, buildPath);
-					Util.copyFile(buildPath, distPath);
+				if (!Fs.existsSync(distPath) || Util.mtime(path) >= Util.mtime(distPath)) {
+					Util.copyFile(path, distPath);
+					// Util.copyFile(buildPath, distPath);
 				}
 			});
 
@@ -401,40 +394,37 @@ exports.run = function(args, config) {
 		});
 	}
 
-	// 构建一个JS文件
+	// compress JS file
 	function buildJs(path) {
 		var relativePath = getRelativePath(path, config.jsSrcPath);
-		var buildPath = getBuildPath(path);
+		// var buildPath = getBuildPath(path);
 		var distPath = getDistPath(path);
 
-		// 把多个文件合并成一个文件
+		// combo several files to a file
 		var libjsList = config.libjs[relativePath];
 		if (libjsList) {
 			var fromPaths = libjsList.map(function(val) {
 				return Path.resolve(config.root + config.jsSrcPath + '/' + val);
 			});
-			// 生成文件出现在引入列表中时不覆盖当前
-			// 防止合并后的文件多次引入同一个子文件
+			// if the list has file prevent it replace the file.
+			// avoid combo the same sub file
 			if(libjsList.indexOf(relativePath) > -1){
 				path = Os.tmpdir() + '/tpm_' + (+new Date) + Math.random();
 			}
-            var combomstr ='/*\n',sourceMap;
-			for(var i=0;i<libjsList.length;i++){
-				combomstr+='@sourceMap:'+libjsList[i]+';\n';
-			}
-			combomstr+="*/\n";
-            sourceMap = combomstr;
-			Util.concatFile(fromPaths, buildPath);
-			// Util.concatFile(fromPaths, path);
-			combomstr+= Util.readFileSync(buildPath, 'utf-8');
+            // var combomstr ='/*\n',sourceMap;
+			// for(var i=0;i<libjsList.length;i++){
+			// 	combomstr+='@sourceMap:'+libjsList[i]+';\n';
+			// }
+			// combomstr+="*/\n";
+			Util.concatFile(fromPaths, distPath, '', config.root);
 
-			Util.writeFileSync(buildPath, combomstr);
-			// Util.copyFile(buildPath,path);
-			Util.minJs(buildPath, distPath, '', sourceMap);
+			if(config.isCompress){
+                Util.minJs(distPath, distPath);
+            }
 			return;
 		}
 
-		// AMD文件
+		// AMD file
 		// var relativePath = getRelativePath(path, config.jsSrcPath);
 
 		if (config.globaljs.indexOf(relativePath) < 0) {
@@ -455,13 +445,15 @@ exports.run = function(args, config) {
 
 		var content = buildJsUtil(path, ignore);
 		// content = ReactTools.transform(content, { harmony: true });
-		Util.writeFileSync(buildPath, content);
-		Util.minJs(buildPath, distPath);
+		Util.writeFileSync(distPath, content);
+        if(config.isCompress){
+            Util.minJs(distPath, distPath);
+        }
 	}
 
-	// 构建一个LESS文件
+	// build a less file
 	function buildLess(path) {
-		var buildPath = getBuildPath(path);
+		// var buildPath = getBuildPath(path);
 		var distPath = getDistPath(path);
 
 		var content = Util.readFileSync(path, 'utf-8');
@@ -481,28 +473,28 @@ exports.run = function(args, config) {
 
 
 			renameAssets(path, content, function(content) {
-				Util.writeFileSync(buildPath, Util.banner + content);
-				Util.minCss(buildPath, distPath);
+				Util.writeFileSync(distPath, content); //Util.banner +
+				Util.minCss(distPath, distPath);
 			});
 		});
 	}
 
-	// 构建一个图片文件
+	// build a img
 	function buildImg(path) {
-		var buildPath = getBuildPath(path);
+		// var buildPath = getBuildPath(path);
 		var distPath = getDistPath(path);
-		Util.copyFile(path, buildPath);
-		Util.copyFile(buildPath, distPath);
+		Util.copyFile(path, distPath);
+		// Util.copyFile(buildPath, distPath);
 	}
 
-	// 构建其它文件
+	// build a other file
 	function buildOther(path) {
-		var buildPath = getBuildPath(path);
+		// var buildPath = getBuildPath(path);
 		var distPath = getDistPath(path);
-		Util.copyFile(path, buildPath);
+		Util.copyFile(path, distPath);
 	}
 
-	// 构建多个文件
+	// build several files
 	function buildFiles(pathList) {
 		pathList.forEach(function(path) {
 			if(/\.(html?|bat|cmd|sh)$/i.test(path)){ // 过虑掉不构建的文件
@@ -519,7 +511,7 @@ exports.run = function(args, config) {
 		});
 	}
 
-	// 初始化
+	// init
 	function init() {
 		var pathList = [];
 

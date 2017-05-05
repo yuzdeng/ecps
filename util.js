@@ -6,7 +6,7 @@ var Iconv = require('iconv-lite');
 var _ = require('underscore');
 var UglifyJS = require('uglify-js');
 var CleanCss = require('clean-css');
-var ChildProcess = require('child_process');
+// var ChildProcess = require('child_process');
 var Crypto = require('crypto');
 
 var SLICE = Array.prototype.slice;
@@ -118,9 +118,8 @@ function copyFile(fromPath, toPath) {
 	info('File "' + toPath + '" created.' + linefeed);
 }
 
-function minJs(fromPath, toPath, charset,sourceMap) {
+function minJs(fromPath, toPath, charset) {
 	charset = charset || 'utf-8';
-    sourceMap = sourceMap || '';
 
 	console.log('Compress file: ' + fromPath);
 
@@ -147,7 +146,7 @@ function minJs(fromPath, toPath, charset,sourceMap) {
 	});
 	var minContent = result.code + ';';
 
-    writeFileSync(toPath, sourceMap + banner + minContent);
+    writeFileSync(toPath,  minContent);//sourceMap + banner +
 
 	info('File "' + toPath + '" created.' + linefeed);
 }
@@ -161,12 +160,12 @@ function minCss(fromPath, toPath, charset) {
 
 	var minContent = CleanCss.process(content);
 
-	writeFileSync(toPath, banner + minContent);
+	writeFileSync(toPath, minContent);
 
 	info('File "' + toPath + '" created.' + linefeed);
 }
 
-function concatFile(fromPaths, toPath, charset) {
+function concatFile(fromPaths, toPath, charset, rootPath) {
 	charset = charset || 'utf-8';
 
 	if (fromPaths.length == 1 && fromPaths[0] == toPath) {
@@ -180,7 +179,14 @@ function concatFile(fromPaths, toPath, charset) {
 	fromPaths.forEach(function(path) {
 		console.log(path);
 
-		contentList.push(readFileSync(path, charset));
+		if(rootPath){
+            var dirPath = Path.resolve(rootPath);
+            var relativePath=Path.relative(dirPath, path).split(Path.sep).join('/');
+		}
+
+        var sourceMap = "//@ sourceMappingURL=" + (relativePath || path);
+
+        contentList.push(readFileSync(path, charset) + sourceMap);
 	});
 
 	writeFileSync(toPath, contentList.join(linefeed));

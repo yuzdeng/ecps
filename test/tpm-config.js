@@ -1,9 +1,7 @@
 
 exports.root = __dirname;
 
-exports.jira_host = 'http://jira.intra.tudou.com';
-
-exports.deploy_mail = 'webtest_fabu@tudou.com';
+exports.isCompress = false;
 
 exports.jsSrcPath = '/src/js';
 
