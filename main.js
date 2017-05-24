@@ -4,23 +4,11 @@ var Optimist = require('optimist');
 
 var Util = require(__dirname + '/util');
 
-var TASK_MAP = {
-	build : true,
-	min : true,
-	list : true,
-	cleanup : true,
-	check : true,
-	vm : true,
-	iconfont : true
-};
-
 Optimist.usage([
-	'Usage: ecps [COMMAND] --config=[CONFIG_FILE]\n\n',
+	'Usage: ecps --config=[CONFIG_FILE]\n\n',
 	'Examples:\n',
 	'ecps src/js/g.js\n',
-	'ecps src/css/g.less\n',
-	'ecps min build/js/g.js\n',
-	'ecps cleanup\n'
+	'ecps src/css/g.less\n'
 ].join(''));
 
 var ARGV = Optimist.argv;
@@ -36,63 +24,15 @@ if (ARGV.version || ARGV.v) {
 	process.exit();
 }
 
-var cmd;
-var args;
+var args = ARGV._;
 
-if (ARGV._.length > 0 && TASK_MAP[ARGV._[0]]) {
-	cmd = ARGV._[0];
-	args = ARGV._.slice(1);
-} else {
-	cmd = 'build';
-	args = ARGV._;
-}
+var arguments = Util.getConfigArgs(args,ARGV.config);
 
-var config = null;
-
-var dirPath = args.length > 0 ? args[0] : '.';
-
-if (!Fs.existsSync(dirPath)) {
-	dirPath = '.';
-}
-
-var dirStat = Fs.statSync(dirPath);
-
-if (!dirStat.isDirectory()) {
-	dirPath = Path.dirname(dirPath);
-}
-
-dirPath = Path.resolve(dirPath);
-
-var path = Util.undef(ARGV.config, './ecps-config.js');
-path = Path.resolve(path);
-
-if (Fs.existsSync(path)) {
-	config = require(path);
-}else{
-	while (true) {
-		path = Path.resolve(dirPath + '/ecps-config.js');
-
-		if (Fs.existsSync(path)) {
-			config = require(path);
-			break;
-		}
-
-		var parentPath = Path.dirname(dirPath);
-
-		if (parentPath == dirPath) {
-			break;
-		}
-
-		dirPath = parentPath;
-	}
-}
-
-
-if (config === null) {
+if (arguments.config === null) {
 	Util.error('File not found: ecps-config.js');
 	process.exit();
 }
 
-var Task = require(__dirname + '/tasks/' + cmd);
+var build = require(__dirname + '/lib/build');
 
-Task.run(args, config);
+build(arguments.args, arguments.config);

@@ -250,6 +250,50 @@ function md5(data, len){
 	return md5sum.digest('hex').substring(0, len);
 }
 
+function getConfigArgs(args, config) {
+    var configFile = null;
+    args = args || '';
+    var dirPath = args.length > 0 ? args[0] : '.';
+
+    if (!Fs.existsSync(dirPath)) {
+        dirPath = '.';
+    }
+
+    var dirStat = Fs.statSync(dirPath);
+
+    if (!dirStat.isDirectory()) {
+        dirPath = Path.dirname(dirPath);
+    }
+
+    dirPath = Path.resolve(dirPath);
+
+    var path = undef(config, './ecps-config.js');
+    path = Path.resolve(path);
+
+    if (Fs.existsSync(path)) {
+        configFile = require(path);
+    }else{
+        while (true) {
+            path = Path.resolve(dirPath + '/ecps-config.js');
+
+            if (Fs.existsSync(path)) {
+                configFile = require(path);
+                break;
+            }
+
+            var parentPath = Path.dirname(dirPath);
+
+            if (parentPath == dirPath) {
+                break;
+            }
+
+            dirPath = parentPath;
+        }
+    }
+
+    return {args:args , config:configFile}
+}
+
 exports.linefeed = linefeed;
 exports.banner = banner;
 exports.each = each;
@@ -269,3 +313,4 @@ exports.concatFile = concatFile;
 exports.grepPaths = grepPaths;
 exports.grepModuleList = grepModuleList;
 exports.md5 = md5;
+exports.getConfigArgs = getConfigArgs;
