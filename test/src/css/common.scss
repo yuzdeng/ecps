@@ -1,0 +1,31 @@
+$imgPath: "../img";
+/* basic usage */
+$link-color: red;
+$font-size: 21px;
+a{
+  color:$link-color;
+  font-size:$font-size;
+}
+span{
+  font-size:$font-size;
+}
+
+//Maps
+$colors: (
+        lt-grey: #efefef,
+        grey: #424242,
+        pink: #ff6599,
+);
+
+$backgrounds: (
+        lt-grey: #ebe4e8
+);
+
+//Maps with function
+@function color($color-name){
+  @return map-get($colors,$color-name);
+}
+
+@function background($background-name) {
+  @return map-get($backgrounds, $background-name);
+}

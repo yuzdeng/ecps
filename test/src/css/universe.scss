@@ -1,0 +1,14 @@
+.line-height16{ line-height: 16px;}
+.flex_hidden{
+    display: none;
+}
+.flexbox .flex_hidden{
+    display: block;
+}
+#universe_widget_column_sub.flexbox .flex-item{
+    display: flex;
+}
+#universe_widget_column_sub.flexbox .flex-item >ul{
+    flex: 1;
+    height: auto;
+}

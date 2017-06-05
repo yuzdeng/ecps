@@ -1,0 +1,25 @@
+@import "common";
+@import "universe";
+/* How to use */
+body {
+  background: map-get($backgrounds, lt-grey);
+  color: map-get($colors, pink);
+}
+
+body1 {
+  background: background(lt-grey);
+  color: color(pink);
+  border-radius:0;
+}
+
+h2 {
+  color: $link-color;
+  font-size: $font-size;
+  background: #f8f8f8 url("#{$imgPath}/g/v_v10.png") center center no-repeat;
+
+}
+
+p {
+  background: #f8f8f8 url("#{$imgPath}/g/i.png") center center no-repeat;
+  position: relative;
+}

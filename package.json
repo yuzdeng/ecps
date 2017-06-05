@@ -59,23 +59,22 @@
     }
   ],
   "dependencies": {
-    "autoprefixer": "~5.2.0",
+    "autoprefixer": "^7.1.1",
     "clean-css": "0.9.1",
-    "postcss-cssnext": "~2.10.0",
     "iconv-lite": "~0.2.5",
-    "less": "~1.4.0-b2",
+    "node-sass": "^4.5.3",
     "optimist": "~0.3.5",
-    "postcss": "^5.2.17",
+    "postcss": "^6.0.1",
+    "postcss-cssnext": "~2.10.0",
     "rimraf": "^2.1.4",
     "uglify-js": "~2.3.6",
     "underscore": "~1.4.4"
   },
   "description": "Static Package Manager based on tpm tool",
-  "devDependencies": {},
   "directories": {},
   "dist": {
     "shasum": "7c05567f1f7fe79e8837b9d7035d017eb64989b8",
-    "tarball": "https://registry.npmjs.org/ecps/-/ecps-1.0.5.tgz"
+    "tarball": "https://registry.npmjs.org/ecps/-/ecps-1.0.7.tgz"
   },
   "gitHead": "",
   "homepage": "",
@@ -101,5 +100,6 @@
     "url": "git://github.com/yuzdeng/ecps"
   },
   "scripts": {},
-  "version": "1.0.5"
+  "version": "1.0.7",
+  "devDependencies": {}
 }

@@ -4,17 +4,20 @@ exports.root = __dirname;
 exports.isCompress = false;
 
 exports.jsSrcPath = '/src/js';
+exports.cssSrcPath = '/src/css';
+exports.imgSrcPath = '/src/img';
 
 exports.main = {
 	"js" : [
-		"libs.js",
-		"g.js",
+		// "libs.js",
+		// "g.js",
 		// "lazy/demo.js",
 		// "page/demo.js"
-		'views/commons/nav/accountOrgNav/accountOrgNavApp.js'
+		// 'views/commons/nav/accountOrgNav/accountOrgNavApp.js'
 	],
 	"css" : [
-		// "g.less"
+		"test.scss",
+		"main.scss"
 	]
 };
 

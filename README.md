@@ -36,11 +36,10 @@ ecps src/js/page/demo.js
 ecps src/js
 ```
 
-### Build LESS
+### Build SASS
 
 ```bash
-ecps src/css/g.less
-ecps src/css/page/demo.less
+ecps src/css/test.scss
 ecps src/css
 ```
 
@@ -51,25 +50,11 @@ ecps src/img/demo.png
 ecps src/img
 ```
 
-### Compress File
-
-```bash
-ecps min src/js/g.js
-```
-
 ### Customize Config
 use config arg to customize config file, default config file is ecps-config.js
 
 ```bash
 ecps src/js/g.js --config=my-config.js
-```
-
-### Arrange Dist Folder
-
-delete extra directories and files in dist
-
-```bash
-ecps cleanup
 ```
 
 ### Config Arg
