@@ -62,13 +62,15 @@
     "autoprefixer": "^7.1.1",
     "clean-css": "0.9.1",
     "iconv-lite": "~0.2.5",
+    "lodash": "^4.17.4",
     "node-sass": "^4.5.3",
     "optimist": "~0.3.5",
     "postcss": "^6.0.1",
     "postcss-cssnext": "~2.10.0",
     "rimraf": "^2.1.4",
+    "through2": "^2.0.3",
     "uglify-js": "~2.3.6",
-    "underscore": "~1.4.4"
+    "underscore": "^1.4.4"
   },
   "description": "Static Package Manager based on tpm tool",
   "directories": {},
